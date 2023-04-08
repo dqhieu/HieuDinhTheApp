@@ -9,54 +9,55 @@ import SwiftUI
 
 struct ProfilePhotoView: View {
 
-  @State private var isRotating = 0.0
+  @State private var rotateDegree = -10800.0
   @State private var scale = 0.0
+  private let maxClockCount = 5
+  @State private var clockCount = 0
+
 
   var body: some View {
     ZStack {
       ZStack {
         Color
-          .yellow
+          .orange
           .frame(width: 100, height: 100)
-        //          .cornerRadius(20)
           .blur(radius: 50)
           .offset(x: -20, y: -20)
         Color
           .red
           .frame(width: 100, height: 100)
-        //          .cornerRadius(20)
           .blur(radius: 50)
           .offset(x: -20, y: 20)
         Color
           .purple
           .frame(width: 100, height: 100)
-        //          .cornerRadius(20)
           .blur(radius: 50)
           .offset(x: 20, y: 20)
         Color
           .blue
           .frame(width: 100, height: 100)
-        //          .cornerRadius(20)
           .blur(radius: 50)
           .offset(x: 20, y: -20)
       }
-      //      .cornerRadius(80)
-      .rotationEffect(.degrees(isRotating))
+      .rotationEffect(.degrees(rotateDegree))
       .onAppear {
-        withAnimation(.linear
-          .speed(0.05).repeatForever(autoreverses: false)) {
-            isRotating = 720.0
-          }
+        withAnimation(.easeOut(duration: 10)) {
+          rotateDegree = 0
+        }
+        withAnimation(.linear(duration: 1).speed(0.5).repeatForever(autoreverses: false).delay(9)) {
+          rotateDegree = 360
+        }
       }
       Image("profile")
         .resizable()
         .scaledToFit()
-        .frame(width: 200, height: 200)
-        .cornerRadius(100)
+        .frame(width: 160, height: 160)
+        .cornerRadius(80)
+        .shadow(color: .secondary.opacity(0.5), radius: 4)
     }
     .scaleEffect(scale)
     .onAppear {
-      withAnimation(.spring()) {
+      withAnimation(.easeInOut(duration: 1)) {
         scale = 1
       }
     }
